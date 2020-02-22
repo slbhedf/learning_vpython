@@ -32,46 +32,44 @@ class Pendulum(object):
         return "Pendulum <theta: " + str(self.theta) +  ", length: " + str(self.length) + ">" 
     
 # draw X,Y,Z axes
-x_axis = arrow(pos=vector(0,0,0), axis=vector(100,0,0), color=color.red, shaftwidth=3)
-y_axis = arrow(pos=vector(0,0,0), axis=vector(0,100,0), color=color.yellow, shaftwidth=3)
-z_axis = arrow(pos=vector(0,0,0), axis=vector(0,0,100), color=color.magenta, shaftwidth=3)
+x_axis = arrow(pos=vector(0,0,0), axis=vector(5,0,0), color=color.red, shaftwidth=0.1)
+y_axis = arrow(pos=vector(0,0,0), axis=vector(0,5,0), color=color.yellow, shaftwidth=0.1)
+z_axis = arrow(pos=vector(0,0,0), axis=vector(0,0,5), color=color.magenta, shaftwidth=0.1)
 
 # draw x,y,z text at the end of the arrows
-x_text = text(text=' x', pos=vector(100,0,0), color=x_axis.color, height=10)
-y_text = text(text=' y', pos=vector(0,100,0), color=y_axis.color, height=10)
-z_text = text(text=' z', pos=vector(0,0,100), color=z_axis.color, height=10)
+x_text = text(text=' x', pos=x_axis.axis, color=x_axis.color, height=0.4)
+y_text = text(text=' y', pos=y_axis.axis, color=y_axis.color, height=0.4)
+z_text = text(text=' z', pos=z_axis.axis, color=z_axis.color, height=0.4)
 
 # paramiter for
 initial_theta = pi/6.0
 theta = initial_theta
-length = 10.0
+length = 1.0
 
 # pendulum
 pendulum = Pendulum(initial_theta, length)
 
 # ceiling
-ceiling = box(pos=vector(50,50,50), size=vector(50,0.1,50))
+ceiling = box(pos=vector(2.5,2.5,2.5), size=vector(5,0.01,5))
 
 # ball 
-x = 50 + length * sin(theta)
-y = 50 - length * cos(theta)
-z = 50
+x = ceiling.pos.x + length * sin(theta)
+y = ceiling.pos.y - length * cos(theta)
+z = ceiling.pos.z
 initial_position = vector(x, y, z)
-ball_pos = initial_position
-ball = sphere(pos=initial_position, raduis=1)
+ball = sphere(pos=initial_position, radius=0.1)
 
 # rod
-rod = cylinder(pos = ceiling.pos, axis = ball.pos - ceiling.pos, radius=0.1)
+rod = cylinder(pos = ceiling.pos, axis = ball.pos - ceiling.pos, radius=0.02)
 
 while(True):
     rate(25)
     pendulum.update() # 0.04 seconds forward
     theta = pendulum.get_theta() 
-    x = 50 + length * sin(theta)
-    y = 50 - length * cos(theta)
-    z = 50
-    ball_pos = vector(x, y, z)
-    ball.pos = ball_pos
-    rod.axis = ball_pos - ceiling.pos
+    x = ceiling.pos.x + length * sin(theta)
+    y = ceiling.pos.y - length * cos(theta)
+    z = ceiling.pos.z
+    ball.pos = vector(x, y, z)
+    rod.axis = ball.pos - ceiling.pos
     # print(pendulum)
     
